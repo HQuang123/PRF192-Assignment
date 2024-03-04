@@ -1,7 +1,7 @@
-#include<stdio.h>
-#include<string.h>
-#include<ctype.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 #define MAXN 100
 
 int menu(){
@@ -9,7 +9,7 @@ int menu(){
 	pritnf("\nParallel Array of Drinks:");
 	printf("\n1 - Add a new Drink");
 	printf("\n2 - Edit information: price of a drink by its code");
-	printf"\n3 - Edit information: name of a drink by its code");
+	printf("\n3 - Edit information: name of a drink by its code");
 	printf("\n4 - Delete a drink by its code");
 	printf("\n5 - Arrange the drink list by drink type (descending)");
 	printf("\n6 - Arrange the drink list by price (ascending)");
@@ -34,7 +34,7 @@ int isEmpty(char drink_name[][50], int n){
 }; 
 
 
-void add(char drink_code[50], char drink_name[50], char drink_type[50], int unit, double price,char drink_codes[][50],char drink_names[][50],char drink_types[][50], int units[], double prices[], int *pn)
+void add(char drink_code[10], char drink_name[10], char drink_type[10], int unit, double price,char drink_codes[][10],char drink_names[][10],char drink_types[][10], int units[], double prices[], int *pn)
 {
 	strcpy(drink_codes[*pn] = drink_code); //add instance to the end of the array
 	strcpy(drink_names[*pn] = drink_name);
@@ -118,6 +118,87 @@ void sort_drink_type(char drink_names[][50],char drink_types[][50], int units[],
  		
 	 }
  }
+}
+
+
+int main(){
+
+	int choice;
+	int n;
+	char codes[MAXN][9];
+	char Names[MAXN][9];
+	char genders[MAXN];
+	int points[MAXN];
+	char drink_code[9];
+	char drink_name[21];
+	char drink_type[50];
+	int unit;
+	double price;
+
+	do{
+	choice = menu();
+	switch(choice){
+		case 1:
+			fflush(stdin);
+			printf("Drink code:");
+			scanf("%8[^\n]", &drink_code);
+			strupr(drink_code);
+			
+			fflush(stdin);
+			printf("Drink name: ");
+			scanf("%20[^\n]", &drink_name);
+			strupr(drink_name);
+			
+			
+			fflush(stdin);
+			printf("Drink type: ");
+			scanf("%c", &drink_type);
+			
+			fflush(stdin);
+			printf("Unit:");
+			scanf("%d", &unit);
+			
+			fflush(stdin);
+			printf("price:");
+			scanf("%d", &price);
+			
+			add(drink_code, drink_name, drink_type, unit, price, drink_codes, drink_names, drink_types, units, prices, &n);
+			
+			printf("Added!\n");
+			  
+			 
+			break;
+		case 2:
+			printf("2");
+			break;
+		case 3:
+			printf("2");
+			break;
+		case 4:
+			printf("2");
+			break;
+		case 5:
+			printf("2");
+			break;
+		case 6:
+			printf("2");
+			break;
+		case 7:
+			printf("2");
+			break;
+		case 8:
+			printf("2");
+			break;
+		case 9:
+			printf("2");
+			break;
+		case 10:
+			printf("2");
+			break;
+		default:
+			printf("Quit");
+	
+	}while(choice > 0 && choice < 11);
 }
 		
 	
