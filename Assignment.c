@@ -170,7 +170,75 @@ void printAll(int n, char drink_codes[][50], char drink_names[][50], char drink_
 	}	
 }
 
+//in ra theo code
+void printDrink (int n, char drink_codes[][50], char drink_code[], char drink_names[][50], char drink_types[], int units[], double prices[]){
+	int i;
+    // Search, print details
+    int found = 0;
+    for ( i = 0; i < n; i++) {
+        if (strcmp(drink_codes[i], drink_code) == 0) {
+            printf("Drink(code: %s, name: %s, type: %c, unit: %d, price: %.3lf)\n",
+                   drink_codes[i], drink_names[i], drink_types[i], units[i], prices[i]);
+            found = 1;
+            break;  // Exit the loop once the drink is found
+        }
+    }
+    if (!found)
+        printf("Drink with code %s not found.\n", drink_code);
+}
 
+//print drink by conditions
+void printDrinksInRange(int n, char drink_codes[][50], char drink_names[][50], char drink_types[], int units[], double prices[]) {
+    double minPrice, maxPrice;
+    
+    printf("\nEnter the minimum price: ");
+    scanf("%lf", &minPrice);
+  
+    printf("Enter the maximum price: ");
+    scanf("%lf", &maxPrice);
+    
+    // Print drinks within the price range
+    int check = 0;
+    int i;
+    for ( i = 0; i < n; i++) {
+        if (prices[i] >= minPrice && prices[i] <= maxPrice) {
+            printf("Drink(code: %s, name: %s, type: %c, unit: %d, price: %.3lf)\n", 
+                   drink_codes[i], drink_names[i], drink_types[i], units[i], prices[i]);
+            check = 1;
+                   
+        }
+    }
+    if(check ==0){
+    	printf("No drink code is in given range");
+	}
+}
+
+//print the highest, average and lowest drinks
+void calculateDrinkStatistics(int n, double prices[]) {
+    if (n == 0) {
+        printf("No drinks in the list.\n");
+    } else {
+        double total = 0;
+        double highest = prices[0];
+        double lowest = prices[0];
+        int i;
+        for ( i = 0; i < n; i++) {
+            total += prices[i];
+            if (prices[i] > highest) {
+                highest = prices[i];
+            }
+            if (prices[i] < lowest) {
+                lowest = prices[i];
+            }
+        }
+        
+        double average = total / n;
+        
+        printf("Average drink price: %.3lf\n", average);
+        printf("Highest drink price: %.3lf\n", highest);
+        printf("Lowest drink price: %.3lf\n", lowest);
+    }
+}
 
 int main(){
 	int choice;
@@ -262,13 +330,18 @@ int main(){
 			printAll(n, drink_codes, drink_names, drink_types, units, prices);
 			break;
 		case 8:
-			printf("2");
+			fflush(stdin);
+			printf("Input drink code:");
+			scanf("%8[^\n]", &drink_code);
+			strupr(drink_code);
+			fflush(stdin);
+			printDrink (n, drink_codes, drink_code, drink_names, drink_types, units, prices);
 			break;
 		case 9:
-			printf("2");
+			printDrinksInRange(n, drink_codes, drink_names, drink_types, units, prices);
 			break;
 		case 10:
-			printf("2");
+			calculateDrinkStatistics(n, prices);
 			break;
 		default:
 			printf("Quit!");
