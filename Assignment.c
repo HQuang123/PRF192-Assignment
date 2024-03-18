@@ -46,56 +46,50 @@ void add(char drink_code[50], char drink_name[50], char drink_type, int unit, do
 }
 
 //EDIT PRICE
-void edit_price(char drink_code[50], double price,char drink_codes[][50], double prices[], int *pn){
-    int i;
-    int pos = -1;
-    for(i = 0; i < *pn; i++){
-        if(strcmp(drink_codes[i], drink_code) == 0){ 
-            pos = i;
-            continue; 
-        }
-    }
-    if(pos != -1) {
-        prices[pos] = price;
-        printf("Price updated successfully!\n");
-    }
-    else {
-        printf("The code is not existed\n");
-    }
-}
-
-
-//EDIT name
-void edit_name(char drink_code[50], char drink_name[50], char drink_codes[][50],char drink_names[][50], int *pn){	
-    int i;
-    int pos = -1;
-    for(i = 0; i < *pn; i++){
-        if(strcmp(drink_codes[i], drink_code) == 0){ 
-            pos = i;
-            break; 
-        }
-    }
-    if(pos != -1) {
-        strcpy(drink_names[pos], drink_name);
-        printf("Name updated successfully!\n");
-    }
-    else {
-        printf("The code is not existed\n");
-    }
-}	
-	
-	
-void delete_drink(char drink_code[50], char drink_name[50], char drink_type, int unit, double price,char drink_codes[][50],char drink_names[][50],char drink_types[], int units[], double prices[], int *pn){
+void edit_price(char drink_code[50], double price,char drink_codes[][50],char drink_names[][50],char drink_types[][50], int units[], double prices[],int *pn){
 	int i;
-	int pos = -1;
-	int result;
-	for(i=0;i< *pn; i++){
-		if(strcmp(drink_codes[i],drink_code) == 0){
-			pos = i;
-			break;
+	int result = MAXN + 1;
+	for(i=0;i<= *pn; i++){
+		if(drink_codes[i] == drink_code){
+			result = i;
 		}
 		};
-	if(pos != -1) {
+	if(result != MAXN + 1) {
+		prices[result] = price;
+	}
+	else
+	{printf("The code is not existed");
+	}
+	}
+
+//EDIT name
+void edit_name(char drink_code[50], double price,char drink_codes[][50],char drink_names[][50],char drink_types[][50], int units[], char drink_name[50], int *pn){
+	int i;
+	int result = MAXN + 1;
+	for(i=0;i<= *pn; i++){
+		if(drink_codes[i] == drink_code){
+			result = i;
+		}
+		};
+	if(result != MAXN + 1) {
+		strcpy(drink_names[result], drink_name);
+	}
+	else
+	{printf("The code is not existed");
+	}
+	}
+	
+	
+int delete_drink(char drink_code[50], double prices[], char drink_codes[][50],char drink_names[][50],char drink_types[], int units[], char drink_name[50], int *pn){
+	int i;
+	int pos = MAXN + 1;
+	int result;
+	for(i=0;i<= *pn; i++){
+		if(drink_codes[i] == drink_code){
+			pos = i;
+		}
+		};
+	if(pos != MAXN + 1) {
 		for(i = pos; i< *pn -1;i++) {
 			strcpy(drink_codes[i], drink_codes[i+1]);
 			strcpy(drink_names[i], drink_names[i+1]);
@@ -104,14 +98,18 @@ void delete_drink(char drink_code[50], char drink_name[50], char drink_type, int
 			prices[i] = prices[i+1];
 		}
 		*pn = *pn - 1;
-		printf("The drink has been deleted");
+		result = 1;//successfully
 	}
 	else
 	{printf("The code is not existed");
+	 result = 0;//unsuccesfully
 	};
+	return result;
 	}
 
-//Print list in descending order
+//nghien cuu swap 2 generic positions
+//sort the drink list based on drink type
+//sap xep giam dan theo loai do uong
 void printDesc(int n, char drink_codes[][50], char drink_names[][50], char drink_types[], int units[], double prices[]){
 	int *addrs = (int *)calloc(n, sizeof(int));
 	int i, j;
@@ -162,6 +160,74 @@ void printAsc(int n, char drink_codes[][50], char drink_names[][50], char drink_
 	free(addrs);
 }
 
+
+//Case8
+void printDrink (int n, char drink_codes[][50], char drink_code[], char drink_names[][50], char drink_types[], int units[], double prices[]){
+printf("\nEnter the drink code: ");
+    scanf("%4s", drink_code);
+
+    // Search, print details
+    int found = 0;
+    for (int i = 0; i < n; i++) {
+        if (strcmp(drink_codes[i], drink_code) == 0) {
+            printf("Drink(code: %s, name: %s, type: %c, unit: %d, price: %.3lf)\n",
+                   drink_codes[i], drink_names[i], drink_types[i], units[i], prices[i]);
+            found = 1;
+            break;  // Exit the loop once the drink is found
+        }
+    }
+    if (!found)
+        printf("Drink with code %s not found.\n", drink_code);
+}
+    	
+
+//case9:
+void printDrinksInRange(int n, char drink_codes[][50], char drink_names[][50], char drink_types[], int units[], double prices[]) {
+    double minPrice, maxPrice;
+    
+    printf("\nEnter the minimum price: ");
+    scanf("%lf", &minPrice);
+  
+    printf("Enter the maximum price: ");
+    scanf("%lf", &maxPrice);
+    
+    // Print drinks within the price range
+    for (int i = 0; i < n; i++) {
+        if (prices[i] >= minPrice && prices[i] <= maxPrice) {
+            printf("Drink(code: %s, name: %s, type: %c, unit: %d, price: %.3lf)\n", 
+                   drink_codes[i], drink_names[i], drink_types[i], units[i], prices[i]);
+        }
+    }
+}
+
+//case10;
+void calculateDrinkStatistics(int n, double prices[]) {
+    if (n == 0) {
+        printf("No drinks in the list.\n");
+    } else {
+        double total = 0;
+        double highest = prices[0];
+        double lowest = prices[0];
+        
+        for (int i = 0; i < n; i++) {
+            total += prices[i];
+            if (prices[i] > highest) {
+                highest = prices[i];
+            }
+            if (prices[i] < lowest) {
+                lowest = prices[i];
+            }
+        }
+        
+        double average = total / n;
+        
+        printf("Average drink price: %.3lf\n", average);
+        printf("Highest drink price: %.3lf\n", highest);
+        printf("Lowest drink price: %.3lf\n", lowest);
+    }
+}
+
+
 //In tat ca ra man hinh
 void printAll(int n, char drink_codes[][50], char drink_names[][50], char drink_types[], int units[], double prices[]){
 	int i;
@@ -169,6 +235,7 @@ void printAll(int n, char drink_codes[][50], char drink_names[][50], char drink_
 	printf("Drink(code: %s, name: %s, type: %c, unit: %d, price: %.3lf)\n", drink_codes[i], drink_names[i], drink_types[i], units[i], prices[i]);
 	}	
 }
+
 
 
 
@@ -196,12 +263,12 @@ int main(){
 		else{
 			fflush(stdin);
 			printf("Input drink code:");
-			scanf("%50[^\n]", &drink_code);
+			scanf("%4[^\n]", &drink_code);
 			strupr(drink_code);
 			
 			fflush(stdin);
 			printf("Name: ");
-			scanf("%50[^\n]", &drink_name);
+			scanf("%20[^\n]", &drink_name);
 			strupr(drink_name);
 			
 			
@@ -225,32 +292,13 @@ int main(){
 			 
 			break;
 		case 2:
-			fflush(stdin);
-			printf("Input drink code:");
-			scanf("%8[^\n]", &drink_code);
-			strupr(drink_code);
-			fflush(stdin);
-			printf("Price:");
-			scanf("%lf", &price);			
-			edit_price(drink_code, price, drink_codes, prices, &n);
+			printf("2");
 			break;
 		case 3:
-			fflush(stdin);
-			printf("Input drink code:");
-			scanf("%8[^\n]", &drink_code);
-			strupr(drink_code);
-			fflush(stdin);
-			printf("Name:");
-			scanf("%s", &drink_name);
-			edit_name(drink_code, drink_name, drink_codes, drink_names, &n);
+			printf("2");
 			break;
 		case 4:
-			fflush(stdin);
-			printf("Input drink code:");
-			scanf("%8[^\n]", &drink_code);
-			strupr(drink_code);
-			fflush(stdin);
-			delete_drink(drink_code, drink_name, drink_type, unit, price, drink_codes, drink_names, drink_types, units, prices, &n);
+			printf("2");
 			break;
 		case 5: //sap xep giam dan theo loai do uong
 			printDesc(n, drink_codes, drink_names, drink_types, units, prices);
@@ -261,15 +309,21 @@ int main(){
 		case 7: //xuat toan bo danh sach
 			printAll(n, drink_codes, drink_names, drink_types, units, prices);
 			break;
-		case 8:
-			printf("2");
+		
+		case 8: 
+    		printDrink (n, drink_codes, drink_code, drink_names, drink_types, units, prices);
 			break;
+		
+		
 		case 9:
-			printf("2");
+			printDrinksInRange(n, drink_codes, drink_names, drink_types, units, prices);
 			break;
+	
+	
 		case 10:
-			printf("2");
+			calculateDrinkStatistics(n, prices);
 			break;
+			
 		default:
 			printf("Quit!");
 	}
